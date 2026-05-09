@@ -14,31 +14,34 @@ import java.awt.*;
 public class QuizBattle extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel mainContainer = new JPanel(cardLayout);
+    private BattlePanel battlePanel;
+    private String difficulty = "easy";
 
-    /**
-     * @param args the command line arguments
-     */
     public QuizBattle() {
         setTitle("Quiz Battle - WMSU CS Edition");
-        setSize(800, 600);
+        setSize(1000, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
+        battlePanel = new BattlePanel(this);
         mainContainer.add(new MainMenu(this), "MENU");
-        mainContainer.add(new BattlePanel(this), "GAME");
-
+        mainContainer.add(battlePanel, "GAME");
         add(mainContainer);
-        showPanel("MENU"); 
+        showPanel("MENU");
+    }
+
+    public void setDifficulty(String diff) {
+        this.difficulty = diff;
+        battlePanel.setDifficulty(diff);
     }
 
     public void showPanel(String name) {
         cardLayout.show(mainContainer, name);
+        if (name.equals("GAME")) mainContainer.getComponent(1).requestFocusInWindow();
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new QuizBattle().setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new QuizBattle().setVisible(true));
     }
 }
